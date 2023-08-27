@@ -49,14 +49,16 @@ import com.example.movieapp.ui.theme.MovieAppTheme
 
 
 @Composable
-fun MovieDetails(){
-    Box(modifier = Modifier.fillMaxWidth()){
-        Box(modifier = Modifier
-            .padding(top = 16.dp, end = 16.dp)
-            .fillMaxWidth()
-            .zIndex(2f)){
+fun MovieDetails() {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Box(
+            modifier = Modifier
+                .padding(top = 16.dp, end = 16.dp)
+                .fillMaxWidth()
+                .zIndex(2f)
+        ) {
             IconButton(
-                onClick = {  },
+                onClick = { },
                 modifier = Modifier
                     .background(
                         shape = RoundedCornerShape(16.dp),
@@ -79,20 +81,22 @@ fun MovieDetails(){
             modifier = Modifier
                 .align(Alignment.TopStart)
                 .zIndex(2f),
-            onClick = {  }
+            onClick = { }
         ) {
             Icon(Icons.Filled.ArrowBack, contentDescription = "back icon")
         }
         val scrollState = rememberScrollState()
-        Column(modifier = Modifier
-            .background(
-                color = Color(
-                    red = 0.1411765f,
-                    green = 0.18039216f,
-                    blue = 0.20392157f
+        Column(
+            modifier = Modifier
+                .background(
+                    color = Color(
+                        red = 0.1411765f,
+                        green = 0.18039216f,
+                        blue = 0.20392157f
+                    )
                 )
-            )
-            .verticalScroll(scrollState)){
+                .verticalScroll(scrollState)
+        ) {
             val configuration = LocalConfiguration.current
             val viewportWidth = configuration.screenWidthDp.dp
             Image(
@@ -105,7 +109,7 @@ fun MovieDetails(){
             )
 
             Column(modifier = Modifier.padding(8.dp)) {
-                Row (verticalAlignment = Alignment.CenterVertically){
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Default.Star,
                         contentDescription = "Rating",
@@ -117,7 +121,12 @@ fun MovieDetails(){
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Text(text = "In a city where fire, water", fontSize = 26.sp, color = Color.White, fontWeight = FontWeight.Bold)
+                Text(
+                    text = "In a city where fire, water",
+                    fontSize = 26.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+                )
 
                 Spacer(modifier = Modifier.height(10.dp))
 
@@ -128,16 +137,29 @@ fun MovieDetails(){
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                Text(text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\n" +
-                        "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\n" +
-                        "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\n" +
-                        "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\n" +
-                        "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\n" +
-                        "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", fontSize = 16.sp, color = Color.White, textAlign = TextAlign.Justify)
+                Text(
+                    text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\n" +
+                            "tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\n" +
+                            "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\n" +
+                            "consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\n" +
+                            "cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\n" +
+                            "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                    fontSize = 16.sp,
+                    color = Color.White,
+                    textAlign = TextAlign.Justify
+                )
 
                 Spacer(modifier = Modifier.height(40.dp))
 
-                Text(text = "Powered By TMDB", fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Cursive, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+                Text(
+                    text = "Powered By TMDB",
+                    fontSize = 16.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.Cursive,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
 
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -146,7 +168,6 @@ fun MovieDetails(){
         }
     }
 }
-
 
 
 @ExperimentalMaterial3Api
