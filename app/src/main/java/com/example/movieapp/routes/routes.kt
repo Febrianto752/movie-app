@@ -1,11 +1,17 @@
 package com.example.movieapp.routes
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.movieapp.ui.components.BottomBar
 import com.example.movieapp.ui.screens.LoginScreen
+import com.example.movieapp.ui.screens.MovieList
 import com.example.movieapp.ui.screens.RegisterScreen
 
 sealed class Routes(val route: String) {
@@ -35,9 +41,22 @@ fun MovieAppNavigation() {
             RegisterScreen(navController = navController)
         }
 
-//        composable(Routes.Home.route) {
-//            BookListCard(navController = navController)
-//        }
+        composable(Routes.Home.route) {
+            Scaffold(
+                bottomBar = {
+                    BottomBar(
+                        navController = navController,
+
+                        modifier = Modifier,
+                    )
+                }) { paddingValues ->
+                Box(
+                    modifier = Modifier.padding(paddingValues)
+                ) {
+                    MovieList(navController = navController)
+                }
+            }
+        }
 //
 //        composable(Routes.BookDetail.route) { backStackEntry ->
 //            BookDetail(

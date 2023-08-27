@@ -92,7 +92,7 @@ fun LoginScreen(
             Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
                 Button(
                     onClick = {
-
+                        navController.navigate(Routes.Home.route)
                     },
                     shape = RoundedCornerShape(50.dp),
                     modifier = Modifier

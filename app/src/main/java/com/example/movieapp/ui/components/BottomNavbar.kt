@@ -36,6 +36,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.movieapp.routes.Routes
 import com.example.movieapp.ui.theme.MovieAppTheme
 
 
@@ -45,13 +46,13 @@ sealed class Destinations(
     val icon: ImageVector? = null
 ) {
     object HomeScreen : Destinations(
-        route = "home_screen",
+        route = Routes.Home.route,
         title = "Home",
         icon = Icons.Outlined.Home
     )
 
-    object Favourite : Destinations(
-        route = "favourite_screen",
+    object MovieFavoriteScreen : Destinations(
+        route = Routes.MovieFavorites.route,
         title = "Favorite",
         icon = Icons.Outlined.Favorite
     )
@@ -125,7 +126,7 @@ fun NavigationGraph(navController: NavHostController) {
         composable(Destinations.HomeScreen.route) {
             HomeScreen()
         }
-        composable(Destinations.Favourite.route) {
+        composable(Destinations.MovieFavoriteScreen.route) {
             FavouriteScreen()
         }
         composable(Destinations.Notification.route) {
@@ -140,7 +141,7 @@ fun BottomBar(
     navController: NavHostController, modifier: Modifier = Modifier,
 ) {
     val screens = listOf(
-        Destinations.HomeScreen, Destinations.Favourite, Destinations.Notification
+        Destinations.HomeScreen, Destinations.MovieFavoriteScreen, Destinations.Notification
     )
 
     NavigationBar(

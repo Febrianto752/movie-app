@@ -62,7 +62,7 @@ import kotlinx.coroutines.withContext
 
 @ExperimentalMaterial3Api
 @Composable
-fun MovieList() {
+fun MovieList(navController: NavHostController) {
     val scrollState = rememberScrollState()
     Scaffold(
         topBar = {
@@ -150,7 +150,7 @@ fun MovieList() {
 @Preview(showBackground = true)
 @Composable
 fun MovieItemPreview() {
-    val navController: NavHostController = rememberNavController()
+    val navController = rememberNavController()
     MovieAppTheme {
         Scaffold(
             bottomBar = {
@@ -163,7 +163,7 @@ fun MovieItemPreview() {
             Box(
                 modifier = Modifier.padding(paddingValues)
             ) {
-                MovieList()
+                MovieList(navController)
             }
         }
 
