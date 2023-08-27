@@ -40,18 +40,20 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.Greeting
 import kotlinx.coroutines.launch
 import com.example.movieapp.R
+import com.example.movieapp.routes.Routes
 import com.example.movieapp.ui.theme.MovieAppTheme
 
 @ExperimentalMaterial3Api
 @Composable
 fun LoginScreen(
-//    navController: NavHostController,
+    navController: NavHostController,
 
-) {
-    Scaffold() {padding ->
+    ) {
+    Scaffold() { padding ->
         Column(
             modifier = Modifier.padding(padding),
             verticalArrangement = Arrangement.Center,
@@ -69,7 +71,7 @@ fun LoginScreen(
                 modifier = Modifier
 
                     .height(200.dp)
-                    .padding(top=50.dp)
+                    .padding(top = 50.dp)
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -111,7 +113,7 @@ fun LoginScreen(
                         start = offset,
                         end = offset
                     ).firstOrNull()?.let { annotation ->
-//                        navController.navigate(Routes.Login.route)
+                        navController.navigate(Routes.Register.route)
                     }
                 }
             )
@@ -160,7 +162,8 @@ private val text = AnnotatedString.Builder("Don't have account? register!")
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
+    val navController = rememberNavController()
     MovieAppTheme {
-        LoginScreen()
+        LoginScreen(navController)
     }
 }

@@ -40,7 +40,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.R
+import com.example.movieapp.routes.Routes
 import com.example.movieapp.ui.theme.MovieAppTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,11 +53,11 @@ import kotlinx.coroutines.withContext
 @ExperimentalMaterial3Api
 @Composable
 fun RegisterScreen(
-//    navController: NavHostController,
+    navController: NavHostController,
 
-) {
+    ) {
     val scrollState = rememberScrollState()
-    Scaffold() {padding ->
+    Scaffold() { padding ->
         Column(
             modifier = Modifier
                 .padding(20.dp, top = 80.dp)
@@ -74,7 +77,13 @@ fun RegisterScreen(
 
             val coroutineScope = rememberCoroutineScope()
 
-            Text(text = "Create an Account", fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, fontSize = 20.sp, modifier = Modifier.fillMaxWidth())
+            Text(
+                text = "Create an Account",
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                fontSize = 20.sp,
+                modifier = Modifier.fillMaxWidth()
+            )
             Spacer(modifier = Modifier.height(20.dp))
             TextField(
                 label = { Text(text = "Name") },
@@ -138,12 +147,10 @@ fun RegisterScreen(
                         start = offset,
                         end = offset
                     ).firstOrNull()?.let { annotation ->
-//                        navController.navigate(Routes.Login.route)
+                        navController.navigate(Routes.Login.route)
                     }
                 }
             )
-
-
 
 
         }
@@ -177,7 +184,8 @@ private val text = AnnotatedString.Builder("Already account? login!")
 @Preview(showBackground = true)
 @Composable
 fun RegisterScreenPreview() {
+    val navController = rememberNavController()
     MovieAppTheme {
-        RegisterScreen()
+        RegisterScreen(navController)
     }
 }
