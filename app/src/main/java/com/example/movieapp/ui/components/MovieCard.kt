@@ -2,17 +2,13 @@ package com.example.movieapp.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.absolutePadding
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,7 +20,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,15 +27,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import coil.compose.rememberImagePainter
-import com.example.movieapp.R
-import com.example.movieapp.ui.screens.LoginScreen
 import com.example.movieapp.ui.theme.MovieAppTheme
 
 @Composable
@@ -51,7 +43,7 @@ fun MovieCard(
 ) {
     Card(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth().background(color = Color.Transparent),
 
         shape = RoundedCornerShape(16.dp)
     ) {
@@ -86,7 +78,11 @@ fun MovieCard(
 
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth().background(color = Color(
+                        red = 0.1411765f,
+                        green = 0.18039216f,
+                        blue = 0.20392157f
+                    ))
             ) {
                 Image(
                     painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original/jZIYaISP3GBSrVOPfrp98AMa8Ng.jpg"),
@@ -107,15 +103,15 @@ fun MovieCard(
                         imageVector = Icons.Default.Star,
                         contentDescription = "Rating",
                         tint = Color.White,
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(18.dp)
 
                     )
-                    Text(text = "4.5", fontSize = 28.sp, color = Color.White)
+                    Text(text = "4.5", fontSize = 16.sp, color = Color.White)
                 }
 
                 Spacer(modifier = Modifier.height(4.dp))
                 
-                Text(text = "In a city where fire, water", fontSize = 32.sp, color = Color.White, fontWeight = FontWeight.Bold)
+                Text(text = "In a city where fire, water", fontSize = 18.sp, color = Color.White, fontWeight = FontWeight.Bold)
 
                 Spacer(modifier = Modifier.height(8.dp))
 

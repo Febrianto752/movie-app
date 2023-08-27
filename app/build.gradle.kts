@@ -79,4 +79,7 @@ dependencies {
     ksp("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
     implementation("io.coil-kt:coil-compose:1.3.2")
 
+    implementation("com.google.accompanist:accompanist-pager:0.22.0-rc")
+
+
 }
