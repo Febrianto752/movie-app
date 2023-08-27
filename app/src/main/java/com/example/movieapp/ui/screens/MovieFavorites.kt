@@ -30,7 +30,7 @@ import com.example.movieapp.ui.components.MovieCard
 import com.example.movieapp.ui.theme.MovieAppTheme
 
 @Composable
-fun MovieFavorites() {
+fun MovieFavorites(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -92,7 +92,7 @@ fun MovieFavoritesPreview() {
             Box(
                 modifier = Modifier.padding(paddingValues)
             ) {
-                MovieFavorites()
+                MovieFavorites(navController)
             }
         }
     }

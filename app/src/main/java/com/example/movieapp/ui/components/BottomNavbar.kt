@@ -57,13 +57,15 @@ sealed class Destinations(
         icon = Icons.Outlined.Favorite
     )
 
-    object Notification : Destinations(
-        route = "notification_screen",
+    object Logout : Destinations(
+        route = Routes.Login.route,
         title = "Logout",
         icon = Icons.Outlined.ExitToApp
     )
 
 }
+
+
 
 @Composable
 fun HomeScreen() {
@@ -129,7 +131,7 @@ fun NavigationGraph(navController: NavHostController) {
         composable(Destinations.MovieFavoriteScreen.route) {
             FavouriteScreen()
         }
-        composable(Destinations.Notification.route) {
+        composable(Destinations.Logout.route) {
             NotificationScreen()
         }
     }
@@ -141,7 +143,7 @@ fun BottomBar(
     navController: NavHostController, modifier: Modifier = Modifier,
 ) {
     val screens = listOf(
-        Destinations.HomeScreen, Destinations.MovieFavoriteScreen, Destinations.Notification
+        Destinations.HomeScreen, Destinations.MovieFavoriteScreen, Destinations.Logout
     )
 
     NavigationBar(
@@ -163,13 +165,19 @@ fun BottomBar(
                 selected = currentRoute == screen.route,
                 onClick = {
 
-                    navController.navigate(screen.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
+                    if (screen.route == Routes.Login.route){
+                        navController.navigate(screen.route)
+                    }else{
+                        navController.navigate(screen.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
                     }
+
+
                 },
                 colors = NavigationBarItemDefaults.colors(
                     unselectedTextColor = Color.Gray, selectedTextColor = Color.White

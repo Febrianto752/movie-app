@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.ui.components.BottomBar
 import com.example.movieapp.ui.screens.LoginScreen
+import com.example.movieapp.ui.screens.MovieFavorites
 import com.example.movieapp.ui.screens.MovieList
 import com.example.movieapp.ui.screens.RegisterScreen
 
@@ -54,6 +55,23 @@ fun MovieAppNavigation() {
                     modifier = Modifier.padding(paddingValues)
                 ) {
                     MovieList(navController = navController)
+                }
+            }
+        }
+
+        composable(Routes.MovieFavorites.route) {
+            Scaffold(
+                bottomBar = {
+                    BottomBar(
+                        navController = navController,
+
+                        modifier = Modifier,
+                    )
+                }) { paddingValues ->
+                Box(
+                    modifier = Modifier.padding(paddingValues)
+                ) {
+                    MovieFavorites(navController = navController)
                 }
             }
         }
