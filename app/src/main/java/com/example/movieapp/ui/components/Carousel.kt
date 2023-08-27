@@ -2,6 +2,7 @@ package com.example.movieapp.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -31,13 +32,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import com.example.movieapp.R
 
 class Carousel {
 }
+
 @Composable
-fun ImageCarousel(images: List<Int>) {
+fun ImageCarousel(images: List<Int>, navController: NavController) {
     val configuration = LocalConfiguration.current
     val viewportWidth = configuration.screenWidthDp.dp
     println(viewportWidth)
@@ -47,9 +51,16 @@ fun ImageCarousel(images: List<Int>) {
     ) {
         items(images) { imageResource ->
 
-            Box(modifier = Modifier
-                .width(viewportWidth - 20.dp)
-                .height(240.dp).padding(end = 8.dp)){
+            Box(
+                modifier = Modifier
+                    .width(viewportWidth - 20.dp)
+                    .height(240.dp)
+                    .padding(end = 8.dp)
+                    .clickable {
+                        navController.navigate("MovieDetail/123")
+                    }
+
+                ) {
                 Image(
                     painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original/jZIYaISP3GBSrVOPfrp98AMa8Ng.jpg"),
                     contentDescription = "carousel image",
@@ -59,10 +70,19 @@ fun ImageCarousel(images: List<Int>) {
                         .fillMaxHeight()
 
                 )
-                
-                Box(modifier = Modifier.fillMaxWidth().fillMaxHeight().background(color = Color(0f, 0f, 0f, 0.3f))){
-                    Column(modifier = Modifier.align(Alignment.BottomStart).padding(start = 10.dp, bottom = 10.dp)){
-                        Row (verticalAlignment = Alignment.CenterVertically){
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .background(color = Color(0f, 0f, 0f, 0.3f))
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.BottomStart)
+                            .padding(start = 10.dp, bottom = 10.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 imageVector = Icons.Default.Star,
                                 contentDescription = "Rating",
@@ -75,7 +95,12 @@ fun ImageCarousel(images: List<Int>) {
 
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        Text(text = "In a city where fire, water", fontSize = 20.sp, color = Color.White, fontWeight = FontWeight.Bold)
+                        Text(
+                            text = "In a city where fire, water",
+                            fontSize = 20.sp,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        )
 
 
                     }
@@ -95,5 +120,6 @@ fun ImageCarouselPreview() {
         R.drawable.ic_launcher_background,
         // Add more image resource IDs here
     )
-    ImageCarousel(images = imageList)
+    val navController = rememberNavController()
+    ImageCarousel(images = imageList, navController = navController)
 }

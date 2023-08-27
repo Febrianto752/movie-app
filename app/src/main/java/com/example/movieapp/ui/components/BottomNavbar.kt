@@ -168,13 +168,7 @@ fun BottomBar(
                     if (screen.route == Routes.Login.route){
                         navController.navigate(screen.route)
                     }else{
-                        navController.navigate(screen.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                        navController.navigate(screen.route)
                     }
 
 

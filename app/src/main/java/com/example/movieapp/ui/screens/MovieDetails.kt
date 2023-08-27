@@ -49,7 +49,8 @@ import com.example.movieapp.ui.theme.MovieAppTheme
 
 
 @Composable
-fun MovieDetails() {
+fun MovieDetails(navController: NavHostController, movieId: Int?) {
+    println(movieId)
     Box(modifier = Modifier.fillMaxWidth()) {
         Box(
             modifier = Modifier
@@ -77,14 +78,6 @@ fun MovieDetails() {
         }
 
 
-        IconButton(
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .zIndex(2f),
-            onClick = { }
-        ) {
-            Icon(Icons.Filled.ArrowBack, contentDescription = "back icon")
-        }
         val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
@@ -177,6 +170,6 @@ fun MovieDetailsPreview() {
     val navController: NavHostController = rememberNavController()
     MovieAppTheme {
 
-        MovieDetails()
+        MovieDetails(navController, 123)
     }
 }

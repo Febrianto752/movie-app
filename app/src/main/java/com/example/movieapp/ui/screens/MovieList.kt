@@ -99,7 +99,7 @@ fun MovieList(navController: NavHostController) {
                     R.drawable.ic_launcher_background,
                     // Add more image resource IDs here
                 )
-                ImageCarousel(images = imageList)
+                ImageCarousel(images = imageList, navController)
 
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -112,7 +112,7 @@ fun MovieList(navController: NavHostController) {
                         Box(modifier = Modifier
                             .padding(end = 8.dp)
                             .width(200.dp)) {
-                            MovieCard(movie = "Hello", isFavorite = true, onToggleFavorite = {})
+                            MovieCard(movie = "Hello", isFavorite = true, onToggleFavorite = {}, navController = navController)
                         }
 
                     }
@@ -130,7 +130,7 @@ fun MovieList(navController: NavHostController) {
                         Box(modifier = Modifier
                             .padding(end = 8.dp)
                             .width(200.dp).background(color = Color.Transparent)) {
-                            MovieCard(movie = "Hello", isFavorite = true, onToggleFavorite = {})
+                            MovieCard(movie = "Hello", isFavorite = true, onToggleFavorite = {}, navController = navController)
                         }
 
                     }

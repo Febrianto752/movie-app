@@ -29,6 +29,7 @@ import com.example.movieapp.ui.components.BottomBar
 import com.example.movieapp.ui.components.MovieCard
 import com.example.movieapp.ui.theme.MovieAppTheme
 
+@ExperimentalMaterial3Api
 @Composable
 fun MovieFavorites(navController: NavHostController) {
     Box(
@@ -61,7 +62,7 @@ fun MovieFavorites(navController: NavHostController) {
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 content = {
                     items(10) { index ->
-                        MovieCard(movie = "", isFavorite = true, onToggleFavorite = {})
+                        MovieCard(movie = "", isFavorite = true, onToggleFavorite = {}, navController = navController)
                     }
                 },
                 modifier = Modifier

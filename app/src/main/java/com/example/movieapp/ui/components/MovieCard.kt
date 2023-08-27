@@ -32,20 +32,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import com.example.movieapp.ui.theme.MovieAppTheme
 
+@ExperimentalMaterial3Api
 @Composable
 fun MovieCard(
     movie: String,
     isFavorite: Boolean,
-    onToggleFavorite: (Boolean) -> Unit
+    onToggleFavorite: (Boolean) -> Unit,
+    navController: NavController
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth().background(color = Color.Transparent),
 
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
+        onClick = {
+            navController.navigate("MovieDetail/321")
+        }
     ) {
         Box(modifier = Modifier
             .fillMaxWidth()
@@ -127,7 +134,8 @@ fun MovieCard(
 @Preview(showBackground = true)
 @Composable
 fun MovieItemPreview() {
+    val navController = rememberNavController()
     MovieAppTheme {
-        MovieCard(movie = "Hello", isFavorite = false, onToggleFavorite = {})
+        MovieCard(movie = "Hello", isFavorite = false, onToggleFavorite = {}, navController)
     }
 }
