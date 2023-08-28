@@ -9,7 +9,7 @@ data class MovieFavorite(
     var id: Int,
     var adult: Boolean,
     var backdrop_path: String,
-    var genre_ids: List<Int>,
+    var genre_ids: String,
     var original_language: String,
     var original_title: String,
     var overview: String,
