@@ -8,7 +8,7 @@ import com.example.movieapp.data.database.tables.users.OfflineUsersRepository
 
 interface AppContainer {
     val usersRepository: IUsersRepository
-    val bookFavoritesRepository: IMovieFavoritesRepository
+    val movieFavoritesRepository: IMovieFavoritesRepository
 
 }
 
@@ -23,8 +23,8 @@ class AppDataContainer(private val context: Context) : AppContainer {
         OfflineUsersRepository(MovieAppDatabase.getDatabase(context).userDao())
     }
 
-    override val bookFavoritesRepository: IMovieFavoritesRepository by lazy{
-        OfflineMovieFavoritesRepository(MovieAppDatabase.getDatabase(context).bookFavoriteDao())
+    override val movieFavoritesRepository: IMovieFavoritesRepository by lazy{
+        OfflineMovieFavoritesRepository(MovieAppDatabase.getDatabase(context).movieFavoriteDao())
     }
 
 }

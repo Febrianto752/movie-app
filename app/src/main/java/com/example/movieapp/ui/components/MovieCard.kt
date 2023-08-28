@@ -35,12 +35,13 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
+import com.example.movieapp.data.models.Movie
 import com.example.movieapp.ui.theme.MovieAppTheme
 
 @ExperimentalMaterial3Api
 @Composable
 fun MovieCard(
-    movie: String,
+    movie: Movie,
     isFavorite: Boolean,
     onToggleFavorite: (Boolean) -> Unit,
     navController: NavController
@@ -92,8 +93,8 @@ fun MovieCard(
                     ))
             ) {
                 Image(
-                    painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original/jZIYaISP3GBSrVOPfrp98AMa8Ng.jpg"),
-                    contentDescription = null,
+                    painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.backdrop_path}"),
+                    contentDescription = "movie",
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(100.dp, 200.dp)
@@ -113,12 +114,12 @@ fun MovieCard(
                         modifier = Modifier.size(18.dp)
 
                     )
-                    Text(text = "4.5", fontSize = 16.sp, color = Color.White)
+                    Text(text = "${movie.vote_average}", fontSize = 16.sp, color = Color.White)
                 }
 
                 Spacer(modifier = Modifier.height(4.dp))
                 
-                Text(text = "In a city where fire, water", fontSize = 18.sp, color = Color.White, fontWeight = FontWeight.Bold)
+                Text(text = "${movie.title}", fontSize = 18.sp, color = Color.White, fontWeight = FontWeight.Bold)
 
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -135,7 +136,23 @@ fun MovieCard(
 @Composable
 fun MovieItemPreview() {
     val navController = rememberNavController()
+    var movie = Movie(
+        id = 240,
+        adult = false,
+        backdrop_path = "/oo4PVK6AyLZN49BokxDFGyclN86.jpg",
+        genre_ids = listOf(18, 80),
+        original_language = "en",
+        original_title = "The Godfather Part II",
+        overview = "In the continuing saga of the Corleone crime family, a young Vito Corleone grows up in Sicily and in 1910s New York. In the 1950s, Michael Corleone attempts to expand the family business into Las Vegas, Hollywood and Cuba.",
+        popularity = 71.015,
+        poster_path = "/bMadFzhjy9T7R8J48QGq1ngWNAK.jpg",
+        release_date = "1974-12-20",
+        title = "The Godfather Part II",
+        video = false,
+        vote_average = 8.6,
+        vote_count = 11178
+    )
     MovieAppTheme {
-        MovieCard(movie = "Hello", isFavorite = false, onToggleFavorite = {}, navController)
+        MovieCard(movie = movie, isFavorite = false, onToggleFavorite = {}, navController)
     }
 }

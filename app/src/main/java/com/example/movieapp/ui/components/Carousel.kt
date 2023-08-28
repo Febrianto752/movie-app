@@ -36,12 +36,13 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import com.example.movieapp.R
+import com.example.movieapp.data.apis.CONFIG
+import com.example.movieapp.data.models.Movie
 
-class Carousel {
-}
+class Carousel {}
 
 @Composable
-fun ImageCarousel(images: List<Int>, navController: NavController) {
+fun ImageCarousel(movies: List<Movie>, navController: NavController) {
     val configuration = LocalConfiguration.current
     val viewportWidth = configuration.screenWidthDp.dp
     println(viewportWidth)
@@ -49,20 +50,20 @@ fun ImageCarousel(images: List<Int>, navController: NavController) {
         modifier = Modifier.padding(top = 8.dp),
 //        contentPadding = PaddingValues(horizontal = 8.dp)
     ) {
-        items(images) { imageResource ->
+        items(movies) { movie ->
 
-            Box(
-                modifier = Modifier
-                    .width(viewportWidth - 20.dp)
-                    .height(240.dp)
-                    .padding(end = 8.dp)
-                    .clickable {
-                        navController.navigate("MovieDetail/123")
-                    }
+            Box(modifier = Modifier
+                .width(viewportWidth - 20.dp)
+                .height(240.dp)
+                .padding(end = 8.dp)
+                .clickable {
+                    navController.navigate("MovieDetail/123")
+                }
 
-                ) {
+            ) {
                 Image(
-                    painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original/jZIYaISP3GBSrVOPfrp98AMa8Ng.jpg"),
+                    painter = rememberImagePainter(data = "${CONFIG.URL_IMG}${movie.backdrop_path
+                    }"),
                     contentDescription = "carousel image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -90,13 +91,13 @@ fun ImageCarousel(images: List<Int>, navController: NavController) {
                                 modifier = Modifier.size(20.dp)
 
                             )
-                            Text(text = "4.5", fontSize = 18.sp, color = Color.White)
+                            Text(text = "${movie.vote_average}", fontSize = 18.sp, color = Color.White)
                         }
 
                         Spacer(modifier = Modifier.height(4.dp))
 
                         Text(
-                            text = "In a city where fire, water",
+                            text = "${movie.title}",
                             fontSize = 20.sp,
                             color = Color.White,
                             fontWeight = FontWeight.Bold
@@ -114,12 +115,55 @@ fun ImageCarousel(images: List<Int>, navController: NavController) {
 @Preview
 @Composable
 fun ImageCarouselPreview() {
-    val imageList = listOf(
-        R.drawable.ic_movie,
-        R.drawable.ic_movie,
-        R.drawable.ic_launcher_background,
+    val topRatedMovies = listOf(
+        Movie(
+            238,
+            false,
+            "/tmU7GeKVybMWFButWEGl2M4GeiP.jpg",
+            listOf(18, 80),
+            "en",
+            "The Godfather",
+            "Spanning the years 1945 to 1955...",
+            121.292,
+            "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+            "1972-03-14",
+            "The Godfather",
+            false,
+            8.7,
+            18492
+        ), Movie(
+            id = 278,
+            adult = false,
+            backdrop_path = "/kXfqcdQKsToO0OUXHcrrNCHDBzO.jpg",
+            genre_ids = listOf(18, 80),
+            original_language = "en",
+            original_title = "The Shawshank Redemption",
+            overview = "Framed in the 1940s for the double murder of his wife and her lover...",
+            popularity = 125.723,
+            poster_path = "/lyQBXzOQSuE59IsHyhrp0qIiPAz.jpg",
+            release_date = "1994-09-23",
+            title = "The Shawshank Redemption",
+            video = false,
+            vote_average = 8.7,
+            vote_count = 24440
+        ), Movie(
+            id = 240,
+            adult = false,
+            backdrop_path = "/oo4PVK6AyLZN49BokxDFGyclN86.jpg",
+            genre_ids = listOf(18, 80),
+            original_language = "en",
+            original_title = "The Godfather Part II",
+            overview = "In the continuing saga of the Corleone crime family, a young Vito Corleone grows up in Sicily and in 1910s New York. In the 1950s, Michael Corleone attempts to expand the family business into Las Vegas, Hollywood and Cuba.",
+            popularity = 71.015,
+            poster_path = "/bMadFzhjy9T7R8J48QGq1ngWNAK.jpg",
+            release_date = "1974-12-20",
+            title = "The Godfather Part II",
+            video = false,
+            vote_average = 8.6,
+            vote_count = 11178
+        )
         // Add more image resource IDs here
     )
     val navController = rememberNavController()
-    ImageCarousel(images = imageList, navController = navController)
+    ImageCarousel(movies = topRatedMovies, navController = navController)
 }

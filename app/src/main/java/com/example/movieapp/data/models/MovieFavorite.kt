@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class MovieFavorite(
     @PrimaryKey(autoGenerate = true)
     var id: Int,
+    var movie_id: Int,
     var adult: Boolean,
     var backdrop_path: String,
     var genre_ids: String,

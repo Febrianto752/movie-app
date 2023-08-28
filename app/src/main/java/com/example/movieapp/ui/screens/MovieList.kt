@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -42,6 +43,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -55,6 +57,8 @@ import com.example.movieapp.ui.components.ImageCarousel
 import com.example.movieapp.ui.components.MovieCard
 import com.example.movieapp.ui.components.NavigationGraph
 import com.example.movieapp.ui.theme.MovieAppTheme
+import com.example.movieapp.ui.viewModels.AppViewModelProvider
+import com.example.movieapp.ui.viewModels.movie.MovieViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -62,7 +66,12 @@ import kotlinx.coroutines.withContext
 
 @ExperimentalMaterial3Api
 @Composable
-fun MovieList(navController: NavHostController) {
+fun MovieList(
+    navController: NavHostController,
+    viewModel: MovieViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+    println("hello ============")
+    println(viewModel.topRatedMovies)
     val scrollState = rememberScrollState()
     Scaffold(
         topBar = {
@@ -88,18 +97,19 @@ fun MovieList(navController: NavHostController) {
                     )
                 )
         ) {
-            Column(modifier = Modifier
-                .padding(start = 10.dp,top = 20.dp)
-                .verticalScroll(scrollState)) {
-                Text("Top Rated", fontWeight = FontWeight.Bold, fontSize = 22.sp,color = Color.White)
-
-                val imageList = listOf(
-                    R.drawable.ic_movie,
-                    R.drawable.ic_movie,
-                    R.drawable.ic_launcher_background,
-                    // Add more image resource IDs here
+            Column(
+                modifier = Modifier
+                    .padding(start = 10.dp, top = 20.dp)
+                    .verticalScroll(scrollState)
+            ) {
+                Text(
+                    "Top Rated",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 22.sp,
+                    color = Color.White
                 )
-                ImageCarousel(images = imageList, navController)
+
+                ImageCarousel(movies = viewModel.topRatedMovies, navController = navController)
 
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -108,11 +118,18 @@ fun MovieList(navController: NavHostController) {
                 LazyRow(
                     modifier = Modifier.padding(top = 8.dp),
                 ) {
-                    items(10) { index ->
-                        Box(modifier = Modifier
-                            .padding(end = 8.dp)
-                            .width(200.dp)) {
-                            MovieCard(movie = "Hello", isFavorite = true, onToggleFavorite = {}, navController = navController)
+                    items(viewModel.popularMovies) { movie ->
+                        Box(
+                            modifier = Modifier
+                                .padding(end = 8.dp)
+                                .width(200.dp)
+                        ) {
+                            MovieCard(
+                                movie = movie,
+                                isFavorite = true,
+                                onToggleFavorite = {},
+                                navController = navController
+                            )
                         }
 
                     }
@@ -121,16 +138,29 @@ fun MovieList(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                Text("Up Coming", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.White)
+                Text(
+                    "Up Coming",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    color = Color.White
+                )
 
                 LazyRow(
                     modifier = Modifier.padding(top = 8.dp),
                 ) {
-                    items(10) { index ->
-                        Box(modifier = Modifier
-                            .padding(end = 8.dp)
-                            .width(200.dp).background(color = Color.Transparent)) {
-                            MovieCard(movie = "Hello", isFavorite = true, onToggleFavorite = {}, navController = navController)
+                    items(viewModel.upComingMovies) { movie ->
+                        Box(
+                            modifier = Modifier
+                                .padding(end = 8.dp)
+                                .width(200.dp)
+                                .background(color = Color.Transparent)
+                        ) {
+                            MovieCard(
+                                movie = movie,
+                                isFavorite = true,
+                                onToggleFavorite = {},
+                                navController = navController
+                            )
                         }
 
                     }

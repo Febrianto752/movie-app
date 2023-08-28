@@ -12,7 +12,7 @@ import com.example.movieapp.data.models.User
 @Database(entities = [User::class, MovieFavorite::class], version = 1, exportSchema = false)
 abstract class MovieAppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
-    abstract fun bookFavoriteDao(): MovieFavoriteDao
+    abstract fun movieFavoriteDao(): MovieFavoriteDao
 
     companion object {
         @Volatile
