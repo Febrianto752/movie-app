@@ -55,6 +55,7 @@ import com.example.movieapp.ui.viewModels.AppViewModelProvider
 import com.example.movieapp.ui.viewModels.movie.MovieDetailViewModel
 import com.example.movieapp.ui.viewModels.movie.MovieFavoriteViewModel
 import com.example.movieapp.ui.viewModels.movie.MovieViewModel
+import com.example.movieapp.ui.viewModels.user.UserViewModel
 import kotlinx.coroutines.launch
 
 
@@ -62,15 +63,22 @@ import kotlinx.coroutines.launch
 fun MovieDetails(
     movieId: Int?,
     viewModelMovieDetail: MovieDetailViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    viewModelMovieFavorites: MovieFavoriteViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    movieFavoriteViewModel: MovieFavoriteViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    userViewModel: UserViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
+    var userLogged = userViewModel.usersList.find {
+        it.isLogin == true;
+    }
     var isFavorite = false;
 
-    if (viewModelMovieFavorites.movieFavoriteList.isNotEmpty()){
-        viewModelMovieFavorites.movieFavoriteList.forEach {
+    if (movieFavoriteViewModel.movieFavoriteList.isNotEmpty() && userLogged != null) {
+        var movieFavoritesUser = movieFavoriteViewModel.movieFavoriteList.filter {
+            it.user_id == userLogged.id
+        }
 
-            if (it.id == viewModelMovieDetail.movieDetail?.id){
+        movieFavoritesUser.forEach {
+            if (it.id == viewModelMovieDetail.movieDetail?.id) {
                 isFavorite = true;
             }
         }
@@ -95,17 +103,17 @@ fun MovieDetails(
             ) {
                 IconButton(
                     onClick = {
-                        coroutineScope.launch {
-
-                        }
-
-                        if (isFavorite){
+                        if (isFavorite) {
                             coroutineScope.launch {
-                                viewModelMovieFavorites.deleteMovieFavorite(viewModelMovieDetail.movieDetail!!.toMovieFavorite())
+                                var movieFavoriteUser = viewModelMovieDetail.movieDetail!!.toMovieFavorite()
+                                movieFavoriteUser.user_id = userLogged?.id ?: 0
+                                movieFavoriteViewModel.deleteMovieFavorite(movieFavoriteUser)
                             }
-                        }else{
+                        } else {
                             coroutineScope.launch {
-                                viewModelMovieFavorites.createMovieFavorite(viewModelMovieDetail.movieDetail!!.toMovieFavorite())
+                                var movieFavoriteUser = viewModelMovieDetail.movieDetail!!.toMovieFavorite()
+                                movieFavoriteUser.user_id = userLogged?.id ?: 0
+                                movieFavoriteViewModel.createMovieFavorite(movieFavoriteUser)
                             }
                         }
                     },

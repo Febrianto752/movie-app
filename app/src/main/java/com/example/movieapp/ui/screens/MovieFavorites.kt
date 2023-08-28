@@ -35,15 +35,19 @@ import com.example.movieapp.ui.theme.MovieAppTheme
 import com.example.movieapp.ui.viewModels.AppViewModelProvider
 import com.example.movieapp.ui.viewModels.movie.MovieDetailViewModel
 import com.example.movieapp.ui.viewModels.movie.MovieFavoriteViewModel
+import com.example.movieapp.ui.viewModels.user.UserViewModel
 
 
 @ExperimentalMaterial3Api
 @Composable
 fun MovieFavorites(
     navController: NavHostController,
-    viewModel: MovieFavoriteViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    movieFavoriteViewModel: MovieFavoriteViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    userViewModel: UserViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    
+    var userLogged = userViewModel.usersList.find {
+        it.isLogin == true;
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -66,14 +70,17 @@ fun MovieFavorites(
             )
 
             Spacer(modifier = Modifier.height(20.dp))
-            if (viewModel.movieFavoriteList.isNotEmpty()){
+            if (movieFavoriteViewModel.movieFavoriteList.isNotEmpty() && userLogged != null){
+                var movieFavoritesUser = movieFavoriteViewModel.movieFavoriteList.filter {
+                    it.user_id == userLogged.id
+                }
                 LazyVerticalGrid(
 
                     columns = GridCells.Fixed(2),
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     horizontalArrangement = Arrangement.spacedBy(10.dp),
                     content = {
-                        items(viewModel.movieFavoriteList) { movieFavorite ->
+                        items(movieFavoritesUser) { movieFavorite ->
                             MovieCard(
                                 movie = movieFavorite.toMovie(),
                                 navController = navController

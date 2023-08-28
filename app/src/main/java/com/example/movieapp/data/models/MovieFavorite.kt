@@ -19,7 +19,8 @@ data class MovieFavorite(
     var title: String,
     var video: Boolean,
     var vote_average: Double,
-    var vote_count: Int
+    var vote_count: Int,
+    var user_id: Int = 0
 )
 
 fun MovieFavorite.toMovie(): Movie{

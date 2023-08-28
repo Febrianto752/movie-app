@@ -42,6 +42,7 @@ import com.example.movieapp.data.models.toMovieFavorite
 import com.example.movieapp.ui.theme.MovieAppTheme
 import com.example.movieapp.ui.viewModels.AppViewModelProvider
 import com.example.movieapp.ui.viewModels.movie.MovieFavoriteViewModel
+import com.example.movieapp.ui.viewModels.user.UserViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -51,15 +52,24 @@ import kotlinx.coroutines.withContext
 fun MovieCard(
     movie: Movie,
     navController: NavController,
-    movieFavoriteViewModel: MovieFavoriteViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    movieFavoriteViewModel: MovieFavoriteViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    userViewModel: UserViewModel = viewModel(factory = AppViewModelProvider.Factory),
 ) {
     val coroutineScope = rememberCoroutineScope()
+    var userLogged = userViewModel.usersList.find {
+        it.isLogin == true;
+    }
+
     var isFavorite = false;
 
-    if (movieFavoriteViewModel.movieFavoriteList.isNotEmpty()){
-        movieFavoriteViewModel.movieFavoriteList.forEach {
+    if (movieFavoriteViewModel.movieFavoriteList.isNotEmpty() && userLogged != null) {
+        var movieFavoritesUser = movieFavoriteViewModel.movieFavoriteList.filter {
+            it.user_id == userLogged.id
+        }
 
-            if (it.id == movie.id){
+        movieFavoritesUser.forEach {
+
+            if (it.id == movie.id) {
 
                 isFavorite = true;
             }
@@ -67,31 +77,39 @@ fun MovieCard(
     }
     Card(
         modifier = Modifier
-            .fillMaxWidth().background(color = Color.Transparent),
+            .fillMaxWidth()
+            .background(color = Color.Transparent),
 
         shape = RoundedCornerShape(16.dp),
         onClick = {
             navController.navigate("MovieDetail/${movie.id}")
         }
     ) {
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .background(color = Color.Transparent)
-            ){
-            Box(modifier = Modifier
+        Box(
+            modifier = Modifier
                 .fillMaxWidth()
                 .background(color = Color.Transparent)
-                .padding(top = 12.dp, end = 12.dp)
-                .zIndex(1f)){
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = Color.Transparent)
+                    .padding(top = 12.dp, end = 12.dp)
+                    .zIndex(1f)
+            ) {
                 IconButton(
                     onClick = {
-                        if (isFavorite){
+                        if (isFavorite) {
                             coroutineScope.launch {
-                                movieFavoriteViewModel.deleteMovieFavorite(movie.toMovieFavorite())
+                                var movieFavoriteUser = movie.toMovieFavorite()
+                                movieFavoriteUser.user_id = userLogged?.id ?: 0
+                                movieFavoriteViewModel.deleteMovieFavorite(movieFavoriteUser)
                             }
-                        }else{
+                        } else {
                             coroutineScope.launch {
-                                movieFavoriteViewModel.createMovieFavorite(movie.toMovieFavorite())
+                                var movieFavoriteUser = movie.toMovieFavorite()
+                                movieFavoriteUser.user_id = userLogged?.id ?: 0
+                                movieFavoriteViewModel.createMovieFavorite(movieFavoriteUser)
                             }
                         }
                     },
@@ -115,11 +133,14 @@ fun MovieCard(
 
             Column(
                 modifier = Modifier
-                    .fillMaxWidth().background(color = Color(
-                        red = 0.1411765f,
-                        green = 0.18039216f,
-                        blue = 0.20392157f
-                    ))
+                    .fillMaxWidth()
+                    .background(
+                        color = Color(
+                            red = 0.1411765f,
+                            green = 0.18039216f,
+                            blue = 0.20392157f
+                        )
+                    )
             ) {
                 Image(
                     painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.poster_path}"),
@@ -135,7 +156,7 @@ fun MovieCard(
 
 
 
-                Row (verticalAlignment = Alignment.CenterVertically){
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Default.Star,
                         contentDescription = "Rating",
@@ -147,8 +168,13 @@ fun MovieCard(
                 }
 
                 Spacer(modifier = Modifier.height(4.dp))
-                
-                Text(text = "${movie.title}", fontSize = 18.sp, color = Color.White, fontWeight = FontWeight.Bold)
+
+                Text(
+                    text = "${movie.title}",
+                    fontSize = 18.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+                )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
