@@ -51,6 +51,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.R
+import com.example.movieapp.routes.Routes
 import com.example.movieapp.ui.components.BottomBar
 import com.example.movieapp.ui.components.Carousel
 import com.example.movieapp.ui.components.ImageCarousel
@@ -59,6 +60,7 @@ import com.example.movieapp.ui.components.NavigationGraph
 import com.example.movieapp.ui.theme.MovieAppTheme
 import com.example.movieapp.ui.viewModels.AppViewModelProvider
 import com.example.movieapp.ui.viewModels.movie.MovieViewModel
+import com.example.movieapp.ui.viewModels.user.UserViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -68,17 +70,21 @@ import kotlinx.coroutines.withContext
 @Composable
 fun MovieList(
     navController: NavHostController,
-    viewModel: MovieViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    movieViewModel: MovieViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    userViewModel: UserViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    println("hello ============")
-    println(viewModel.topRatedMovies)
+    var userLogged = userViewModel.usersList.find{
+        it.isLogin == true;
+    }
+
+
     val scrollState = rememberScrollState()
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        "Welcome Febrianto",
+                        "Welcome ${userLogged?.name ?: ""}",
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
                         modifier = Modifier
@@ -109,7 +115,7 @@ fun MovieList(
                     color = Color.White
                 )
 
-                ImageCarousel(movies = viewModel.topRatedMovies, navController = navController)
+                ImageCarousel(movies = movieViewModel.topRatedMovies, navController = navController)
 
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -118,7 +124,7 @@ fun MovieList(
                 LazyRow(
                     modifier = Modifier.padding(top = 8.dp),
                 ) {
-                    items(viewModel.popularMovies) { movie ->
+                    items(movieViewModel.popularMovies) { movie ->
                         Box(
                             modifier = Modifier
                                 .padding(end = 8.dp)
@@ -146,7 +152,7 @@ fun MovieList(
                 LazyRow(
                     modifier = Modifier.padding(top = 8.dp),
                 ) {
-                    items(viewModel.upComingMovies) { movie ->
+                    items(movieViewModel.upComingMovies) { movie ->
                         Box(
                             modifier = Modifier
                                 .padding(end = 8.dp)

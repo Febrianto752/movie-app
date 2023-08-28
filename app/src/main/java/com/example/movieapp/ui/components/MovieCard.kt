@@ -51,13 +51,13 @@ import kotlinx.coroutines.withContext
 fun MovieCard(
     movie: Movie,
     navController: NavController,
-    viewModel: MovieFavoriteViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    movieFavoriteViewModel: MovieFavoriteViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
     var isFavorite = false;
 
-    if (viewModel.movieFavoriteList.isNotEmpty()){
-        viewModel.movieFavoriteList.forEach {
+    if (movieFavoriteViewModel.movieFavoriteList.isNotEmpty()){
+        movieFavoriteViewModel.movieFavoriteList.forEach {
 
             if (it.id == movie.id){
 
@@ -87,11 +87,11 @@ fun MovieCard(
                     onClick = {
                         if (isFavorite){
                             coroutineScope.launch {
-                                viewModel.deleteMovieFavorite(movie.toMovieFavorite())
+                                movieFavoriteViewModel.deleteMovieFavorite(movie.toMovieFavorite())
                             }
                         }else{
                             coroutineScope.launch {
-                                viewModel.createMovieFavorite(movie.toMovieFavorite())
+                                movieFavoriteViewModel.createMovieFavorite(movie.toMovieFavorite())
                             }
                         }
                     },

@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +31,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -38,6 +40,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.routes.Routes
 import com.example.movieapp.ui.theme.MovieAppTheme
+import com.example.movieapp.ui.viewModels.AppViewModelProvider
+import com.example.movieapp.ui.viewModels.user.UserViewModel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 
 sealed class Destinations(
@@ -140,11 +146,12 @@ fun NavigationGraph(navController: NavHostController) {
 @ExperimentalMaterial3Api
 @Composable
 fun BottomBar(
-    navController: NavHostController, modifier: Modifier = Modifier,
+    navController: NavHostController, modifier: Modifier = Modifier, viewModel: UserViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val screens = listOf(
         Destinations.HomeScreen, Destinations.MovieFavoriteScreen, Destinations.Logout
     )
+    val coroutineScope = rememberCoroutineScope()
 
     NavigationBar(
         modifier = modifier,
@@ -165,8 +172,20 @@ fun BottomBar(
                 selected = currentRoute == screen.route,
                 onClick = {
 
-                    if (screen.route == Routes.Login.route){
-                        navController.navigate(screen.route)
+                    if (screen.title == Destinations.Logout.title){
+                        var userLogged = viewModel.usersList.find {
+                            it.isLogin == true
+                        }
+
+                        userLogged!!.isLogin = false
+
+                        coroutineScope.launch {
+                            viewModel.updateUser(userLogged)
+                        }
+
+                        navController.navigate(screen.route){
+                            popUpTo(Routes.Login.route)
+                        }
                     }else{
                         navController.navigate(screen.route)
                     }

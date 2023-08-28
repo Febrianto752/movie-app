@@ -39,6 +39,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.Greeting
@@ -46,13 +47,23 @@ import kotlinx.coroutines.launch
 import com.example.movieapp.R
 import com.example.movieapp.routes.Routes
 import com.example.movieapp.ui.theme.MovieAppTheme
+import com.example.movieapp.ui.viewModels.AppViewModelProvider
+import com.example.movieapp.ui.viewModels.user.UserViewModel
 
 @ExperimentalMaterial3Api
 @Composable
 fun LoginScreen(
     navController: NavHostController,
-
+    viewModel: UserViewModel = viewModel(factory = AppViewModelProvider.Factory)
     ) {
+    var userLogged = viewModel.usersList.find {
+        it.isLogin == true
+    }
+
+    if (userLogged != null){
+        navController.navigate(Routes.Home.route)
+    }
+
     Scaffold() { padding ->
         Column(
             modifier = Modifier.padding(padding),
@@ -92,7 +103,20 @@ fun LoginScreen(
             Box(modifier = Modifier.padding(40.dp, 0.dp, 40.dp, 0.dp)) {
                 Button(
                     onClick = {
-                        navController.navigate(Routes.Home.route)
+                        var user = viewModel.usersList.find{
+                            it.email == email.value && it.password == password.value
+                        }
+
+                        if (user != null){
+                            user.isLogin = true;
+                            coroutineScope.launch {
+                                viewModel.updateUser(user)
+                            }
+                            navController.navigate(Routes.Home.route)
+                        }else{
+                            showToast.value = true;
+                        }
+
                     },
                     shape = RoundedCornerShape(50.dp),
                     modifier = Modifier
@@ -113,6 +137,7 @@ fun LoginScreen(
                         start = offset,
                         end = offset
                     ).firstOrNull()?.let { annotation ->
+
                         navController.navigate(Routes.Register.route)
                     }
                 }
