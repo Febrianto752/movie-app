@@ -52,6 +52,8 @@ import com.example.movieapp.ui.viewModels.AppViewModelProvider
 import com.example.movieapp.ui.viewModels.user.UserViewModel
 import com.example.movieapp.utilities.isEmailValid
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -61,7 +63,7 @@ import kotlinx.coroutines.withContext
 fun RegisterScreen(
     navController: NavHostController,
     viewModel: UserViewModel = viewModel(factory = AppViewModelProvider.Factory)
-    ) {
+) {
     val scrollState = rememberScrollState()
     Scaffold() { padding ->
         Column(
@@ -116,22 +118,39 @@ fun RegisterScreen(
                     onClick = {
                         if (username.value != "" && email.value != "" && password.value != "") {
 
-                            if (isEmailValid(email.value)){
+                            if (isEmailValid(email.value)) {
+
                                 var user = User(
                                     name = username.value,
                                     email = email.value,
                                     password = password.value
                                 )
 
-                                coroutineScope.launch {
-                                    viewModel.createUser(user)
+
+                                var emailHasBeenUsed = false
+                                viewModel.usersList.forEach {
+                                    if (it.email == user.email) {
+                                        emailHasBeenUsed = true;
+                                    }
+
                                 }
 
-                                showToast.value = true
-                                username.value = ""
-                                email.value = ""
-                                password.value = ""
-                            }else{
+                                if (emailHasBeenUsed == false) {
+                                    coroutineScope.launch {
+                                        viewModel.createUser(user)
+                                    }
+
+                                    showToast.value = true
+                                    username.value = ""
+                                    email.value = ""
+                                    password.value = ""
+
+                                } else {
+                                    errorMessage.value = "email sudah terpakai";
+                                    showToast.value = true;
+                                    isError.value = true;
+                                }
+                            } else {
                                 errorMessage.value = "email is not valid";
                                 showToast.value = true;
                                 isError.value = true;
@@ -187,17 +206,20 @@ fun RegisterScreen(
                 }
             )
 
-            LazyColumn(modifier = Modifier.padding(top = 100.dp).heightIn(0.dp, 300.dp)) {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(top = 100.dp)
+                    .heightIn(0.dp, 300.dp)
+            ) {
                 items(viewModel.usersList) { user ->
 
-                    Column(){
+                    Column() {
                         Text(user.name)
                         Text(user.email)
                         Text(user.password)
-                        println(user.isLogin)
 
                         Button(onClick = {
-                            coroutineScope.launch{
+                            coroutineScope.launch {
                                 viewModel.deleteUser(user)
                             }
                         }) {
@@ -206,7 +228,7 @@ fun RegisterScreen(
 
                         Button(onClick = {
                             user.isLogin = true
-                            coroutineScope.launch{
+                            coroutineScope.launch {
                                 viewModel.updateUser(user)
                             }
                         }) {
@@ -220,7 +242,7 @@ fun RegisterScreen(
             }
 
             Button(onClick = {
-                coroutineScope.launch{
+                coroutineScope.launch {
                     withContext(Dispatchers.IO) {
                         // Operasi database dijalankan di Dispatchers.IO
                         viewModel.deleteAllUser()

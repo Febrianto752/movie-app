@@ -15,8 +15,6 @@ class UserViewModel(private val usersRepository: IUsersRepository) : ViewModel()
     var usersList by mutableStateOf<List<User>>(emptyList())
         private set
 
-    var userLogged by mutableStateOf<User?>(null)
-        private set
 
     init {
         viewModelScope.launch {
@@ -26,12 +24,6 @@ class UserViewModel(private val usersRepository: IUsersRepository) : ViewModel()
             }
         }
 
-        viewModelScope.launch {
-            var user = usersRepository.getUserLogin()
-            user.collect { userData ->
-                userLogged = userData
-            }
-        }
     }
 
     suspend fun updateUserList(){
@@ -48,6 +40,8 @@ class UserViewModel(private val usersRepository: IUsersRepository) : ViewModel()
     fun login(email: String, password: String): Flow<User?> {
         return usersRepository.getUserByEmailAndPassword(email, password)
     }
+
+
 
     suspend fun createUser(user: User) {
         usersRepository.insertUser(user)
