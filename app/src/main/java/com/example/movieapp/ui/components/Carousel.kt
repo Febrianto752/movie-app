@@ -57,7 +57,7 @@ fun ImageCarousel(movies: List<Movie>, navController: NavController) {
                 .height(240.dp)
                 .padding(end = 8.dp)
                 .clickable {
-                    navController.navigate("MovieDetail/123")
+                    navController.navigate("MovieDetail/${movie.id}")
                 }
 
             ) {

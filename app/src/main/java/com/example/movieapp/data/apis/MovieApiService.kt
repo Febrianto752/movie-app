@@ -1,5 +1,6 @@
 package com.example.movieapp.data.apis
 
+import com.example.movieapp.data.models.responses.MovieDetailsResponseApi
 import com.example.movieapp.data.models.responses.MoviesResponseApi
 import com.example.movieapp.data.models.responses.UpComingMoviesResponseApi
 import retrofit2.Call
@@ -20,7 +21,7 @@ interface MovieApiService {
     fun getUpComingMovies(@Header("Authorization") authorization: String): Call<UpComingMoviesResponseApi>?
 
     @GET("movie/{movie_id}?language=en-US")
-    fun getMovieDetail(@Header("Authorization") authorization: String, @Path("movie_id") movieId: Int): Call<UpComingMoviesResponseApi>?
+    fun getMovieDetail(@Header("Authorization") authorization: String, @Path("movie_id") movieId: Int): Call<MovieDetailsResponseApi>?
 }
 
 

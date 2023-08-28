@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.movieapp.MovieApplication
 import com.example.movieapp.data.apis.MovieApiService
 import com.example.movieapp.data.apis.retrofit
+import com.example.movieapp.ui.viewModels.movie.MovieDetailViewModel
 import com.example.movieapp.ui.viewModels.movie.MovieViewModel
 import com.example.movieapp.ui.viewModels.user.UserViewModel
 
@@ -35,6 +36,10 @@ object AppViewModelProvider {
 
         initializer {
             MovieViewModel(retrofit.create(MovieApiService::class.java))
+        }
+
+        initializer {
+            MovieDetailViewModel(retrofit.create(MovieApiService::class.java))
         }
 
         initializer {

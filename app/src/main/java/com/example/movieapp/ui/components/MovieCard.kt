@@ -52,7 +52,7 @@ fun MovieCard(
 
         shape = RoundedCornerShape(16.dp),
         onClick = {
-            navController.navigate("MovieDetail/321")
+            navController.navigate("MovieDetail/${movie.id}")
         }
     ) {
         Box(modifier = Modifier
@@ -93,7 +93,7 @@ fun MovieCard(
                     ))
             ) {
                 Image(
-                    painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.backdrop_path}"),
+                    painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${movie.poster_path}"),
                     contentDescription = "movie",
                     modifier = Modifier
                         .fillMaxWidth()
