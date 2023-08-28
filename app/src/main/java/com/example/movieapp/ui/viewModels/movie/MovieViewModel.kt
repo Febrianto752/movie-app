@@ -32,17 +32,14 @@ class MovieViewModel(private val movieApiService: MovieApiService) : ViewModel()
 
             try {
                 println("Start ========")
-                var topRatedMoviesRequest = withContext(Dispatchers.IO) {
-                    movieApiService.getTopRatedMovies(token)
-                }
+                var topRatedMoviesRequest = movieApiService.getTopRatedMovies(token)
 
-                var popularMoviesRequest = withContext(Dispatchers.IO) {
-                    movieApiService.getPopularMovies(token)
-                }
 
-                var upComingMoviesRequest = withContext(Dispatchers.IO) {
-                    movieApiService.getUpComingMovies(token)
-                }
+                var popularMoviesRequest = movieApiService.getPopularMovies(token)
+
+
+                var upComingMoviesRequest = movieApiService.getUpComingMovies(token)
+
                 println("top rated get !!!")
                 if (topRatedMoviesRequest != null && popularMoviesRequest != null && upComingMoviesRequest != null) {
                     val responseTopRated = topRatedMoviesRequest.execute()

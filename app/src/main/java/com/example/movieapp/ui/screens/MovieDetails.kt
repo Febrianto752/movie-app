@@ -46,34 +46,45 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
+import com.example.movieapp.data.models.responses.toMovieFavorite
+import com.example.movieapp.data.models.toMovieFavorite
 import com.example.movieapp.ui.components.Badge
 import com.example.movieapp.ui.components.BottomBar
 import com.example.movieapp.ui.theme.MovieAppTheme
 import com.example.movieapp.ui.viewModels.AppViewModelProvider
 import com.example.movieapp.ui.viewModels.movie.MovieDetailViewModel
+import com.example.movieapp.ui.viewModels.movie.MovieFavoriteViewModel
 import com.example.movieapp.ui.viewModels.movie.MovieViewModel
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun MovieDetails(
-    navController: NavHostController,
     movieId: Int?,
-    viewModel: MovieDetailViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModelMovieDetail: MovieDetailViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    viewModelMovieFavorites: MovieFavoriteViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val coroutineScope = rememberCoroutineScope()
+    var isFavorite = false;
+
+    if (viewModelMovieFavorites.movieFavoriteList.isNotEmpty()){
+        viewModelMovieFavorites.movieFavoriteList.forEach {
+
+            if (it.id == viewModelMovieDetail.movieDetail?.id){
+                isFavorite = true;
+            }
+        }
+    }
+
     if (movieId != null){
         LaunchedEffect(Unit) {
-
             coroutineScope.launch {
-
-                viewModel.setMovieDetail(movieId)
-
+                viewModelMovieDetail.setMovieDetail(movieId)
             }
         }
     }
     
-    if (viewModel.movieDetail != null){
+    if (viewModelMovieDetail.movieDetail != null){
         val scrollState = rememberScrollState()
         Box(modifier = Modifier.fillMaxWidth().verticalScroll(scrollState)) {
             Box(
@@ -83,18 +94,31 @@ fun MovieDetails(
                     .zIndex(2f)
             ) {
                 IconButton(
-                    onClick = { },
+                    onClick = {
+                        coroutineScope.launch {
+
+                        }
+
+                        if (isFavorite){
+                            coroutineScope.launch {
+                                viewModelMovieFavorites.deleteMovieFavorite(viewModelMovieDetail.movieDetail!!.toMovieFavorite())
+                            }
+                        }else{
+                            coroutineScope.launch {
+                                viewModelMovieFavorites.createMovieFavorite(viewModelMovieDetail.movieDetail!!.toMovieFavorite())
+                            }
+                        }
+                    },
                     modifier = Modifier
                         .background(
                             shape = RoundedCornerShape(16.dp),
-                            color = Color.Red
+                            color = if (isFavorite) Color.Red else Color.LightGray
                         )
                         .align(Alignment.TopEnd)
-
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Favorite,
-                        contentDescription = "Remove from favorites",
+                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = if (isFavorite) "Remove from favorites" else "Add to favorites",
                         tint = Color.White
                     )
                 }
@@ -116,7 +140,7 @@ fun MovieDetails(
                 val configuration = LocalConfiguration.current
                 val viewportWidth = configuration.screenWidthDp.dp
                 Image(
-                    painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${viewModel.movieDetail?.poster_path}"),
+                    painter = rememberImagePainter(data = "https://image.tmdb.org/t/p/original${viewModelMovieDetail.movieDetail?.poster_path}"),
                     contentDescription = "movie detail",
                     modifier = Modifier
                         .fillMaxWidth()
@@ -132,13 +156,13 @@ fun MovieDetails(
                             tint = Color.White,
                             modifier = Modifier.size(18.dp)
                         )
-                        Text(text = "${String.format("%.1f", viewModel.movieDetail?.vote_average)}", fontSize = 16.sp, color = Color.White)
+                        Text(text = "${String.format("%.1f", viewModelMovieDetail.movieDetail?.vote_average)}", fontSize = 16.sp, color = Color.White)
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
-                        text = "${viewModel.movieDetail?.title}",
+                        text = "${viewModelMovieDetail.movieDetail?.title}",
                         fontSize = 26.sp,
                         color = Color.White,
                         fontWeight = FontWeight.Bold
@@ -147,7 +171,7 @@ fun MovieDetails(
                     Spacer(modifier = Modifier.height(10.dp))
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        viewModel.movieDetail?.genres?.forEach {
+                        viewModelMovieDetail.movieDetail?.genres?.forEach {
                             Badge(text = "${it.name}")
                         }
 
@@ -156,7 +180,7 @@ fun MovieDetails(
                     Spacer(modifier = Modifier.height(10.dp))
 
                     Text(
-                        text = "${viewModel.movieDetail?.overview}",
+                        text = "${viewModelMovieDetail.movieDetail?.overview}",
                         fontSize = 16.sp,
                         color = Color.White,
                         textAlign = TextAlign.Justify
@@ -205,7 +229,7 @@ fun MovieDetailsPreview() {
             Box(
                 modifier = Modifier.padding(paddingValues)
             ) {
-                MovieDetails(navController, 278)
+                MovieDetails( 278)
             }
         }
     }

@@ -1,5 +1,7 @@
 package com.example.movieapp.data.models.responses
 
+import com.example.movieapp.data.models.MovieFavorite
+
 data class MovieDetailsResponseApi(
     val adult: Boolean,
     val backdrop_path: String,
@@ -50,3 +52,24 @@ data class SpokenLanguage(
     val iso_639_1: String,
     val name: String
 )
+
+fun MovieDetailsResponseApi.toMovieFavorite(): MovieFavorite {
+    var movieFavorite = MovieFavorite(
+        id = id,
+        adult = adult,
+        backdrop_path = backdrop_path,
+        genre_ids = genres.map{it.id}.joinToString(", "),
+        original_language,
+        original_title,
+        overview,
+        popularity,
+        poster_path,
+        release_date,
+        title,
+        video,
+        vote_average,
+        vote_count
+    )
+
+    return movieFavorite;
+}

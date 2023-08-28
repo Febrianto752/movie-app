@@ -126,8 +126,6 @@ fun MovieList(
                         ) {
                             MovieCard(
                                 movie = movie,
-                                isFavorite = true,
-                                onToggleFavorite = {},
                                 navController = navController
                             )
                         }
@@ -157,8 +155,6 @@ fun MovieList(
                         ) {
                             MovieCard(
                                 movie = movie,
-                                isFavorite = true,
-                                onToggleFavorite = {},
                                 navController = navController
                             )
                         }

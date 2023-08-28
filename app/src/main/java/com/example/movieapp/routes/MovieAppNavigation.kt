@@ -78,7 +78,6 @@ fun MovieAppNavigation() {
                     modifier = Modifier.padding(paddingValues)
                 ) {
                     MovieDetails(
-                        navController = navController,
                         backStackEntry.arguments?.getString("movieId")?.toIntOrNull()
                     )
                 }

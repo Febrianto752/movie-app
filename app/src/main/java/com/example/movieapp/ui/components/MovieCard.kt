@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,20 +33,38 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import com.example.movieapp.data.models.Movie
+import com.example.movieapp.data.models.toMovieFavorite
 import com.example.movieapp.ui.theme.MovieAppTheme
+import com.example.movieapp.ui.viewModels.AppViewModelProvider
+import com.example.movieapp.ui.viewModels.movie.MovieFavoriteViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @ExperimentalMaterial3Api
 @Composable
 fun MovieCard(
     movie: Movie,
-    isFavorite: Boolean,
-    onToggleFavorite: (Boolean) -> Unit,
-    navController: NavController
+    navController: NavController,
+    viewModel: MovieFavoriteViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    var isFavorite = false;
+
+    if (viewModel.movieFavoriteList.isNotEmpty()){
+        viewModel.movieFavoriteList.forEach {
+
+            if (it.id == movie.id){
+
+                isFavorite = true;
+            }
+        }
+    }
     Card(
         modifier = Modifier
             .fillMaxWidth().background(color = Color.Transparent),
@@ -65,7 +84,17 @@ fun MovieCard(
                 .padding(top = 12.dp, end = 12.dp)
                 .zIndex(1f)){
                 IconButton(
-                    onClick = { onToggleFavorite(!isFavorite) },
+                    onClick = {
+                        if (isFavorite){
+                            coroutineScope.launch {
+                                viewModel.deleteMovieFavorite(movie.toMovieFavorite())
+                            }
+                        }else{
+                            coroutineScope.launch {
+                                viewModel.createMovieFavorite(movie.toMovieFavorite())
+                            }
+                        }
+                    },
                     modifier = Modifier
                         .background(
                             shape = RoundedCornerShape(16.dp),
@@ -153,6 +182,6 @@ fun MovieItemPreview() {
         vote_count = 11178
     )
     MovieAppTheme {
-        MovieCard(movie = movie, isFavorite = false, onToggleFavorite = {}, navController)
+        MovieCard(movie = movie, navController)
     }
 }

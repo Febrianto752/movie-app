@@ -15,11 +15,21 @@ class UserViewModel(private val usersRepository: IUsersRepository) : ViewModel()
     var usersList by mutableStateOf<List<User>>(emptyList())
         private set
 
+    var userLogged by mutableStateOf<User?>(null)
+        private set
+
     init {
         viewModelScope.launch {
             var users = usersRepository.getAllUsersStream()
             users.collect { userListParam ->
                 usersList = userListParam;
+            }
+        }
+
+        viewModelScope.launch {
+            var user = usersRepository.getUserLogin()
+            user.collect { userData ->
+                userLogged = userData
             }
         }
     }
