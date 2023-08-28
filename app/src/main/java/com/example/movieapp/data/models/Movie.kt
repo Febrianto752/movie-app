@@ -16,3 +16,24 @@ data class Movie(
     var vote_average: Double,
     var vote_count: Int
 )
+
+fun Movie.toMovieFavorite(): MovieFavorite {
+    var movieFavorite = MovieFavorite(
+        id = id,
+        adult = adult,
+        backdrop_path = backdrop_path,
+        genre_ids = genre_ids.joinToString(", "),
+        original_language,
+        original_title,
+        overview,
+        popularity,
+        poster_path,
+        release_date,
+        title,
+        video,
+        vote_average,
+        vote_count
+    )
+
+    return movieFavorite;
+}
