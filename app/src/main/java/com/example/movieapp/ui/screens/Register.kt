@@ -206,52 +206,52 @@ fun RegisterScreen(
                 }
             )
 
-            LazyColumn(
-                modifier = Modifier
-                    .padding(top = 100.dp)
-                    .heightIn(0.dp, 300.dp)
-            ) {
-                items(viewModel.usersList) { user ->
-
-                    Column() {
-                        Text(user.name)
-                        Text(user.email)
-                        Text(user.password)
-
-                        Button(onClick = {
-                            coroutineScope.launch {
-                                viewModel.deleteUser(user)
-                            }
-                        }) {
-                            Text(text = "Delete ${user.name} ${user.email}")
-                        }
-
-                        Button(onClick = {
-                            user.isLogin = true
-                            coroutineScope.launch {
-                                viewModel.updateUser(user)
-                            }
-                        }) {
-                            Text(text = "Update ${user.name} ${user.email}")
-                        }
-                    }
-
-                }
-
-
-            }
-
-            Button(onClick = {
-                coroutineScope.launch {
-                    withContext(Dispatchers.IO) {
-                        // Operasi database dijalankan di Dispatchers.IO
-                        viewModel.deleteAllUser()
-                    }
-
-                }
-            }) {
-                Text(text = "Delete All User")
-            }
+//            LazyColumn(
+//                modifier = Modifier
+//                    .padding(top = 100.dp)
+//                    .heightIn(0.dp, 300.dp)
+//            ) {
+//                items(viewModel.usersList) { user ->
+//
+//                    Column() {
+//                        Text(user.name)
+//                        Text(user.email)
+//                        Text(user.password)
+//
+//                        Button(onClick = {
+//                            coroutineScope.launch {
+//                                viewModel.deleteUser(user)
+//                            }
+//                        }) {
+//                            Text(text = "Delete ${user.name} ${user.email}")
+//                        }
+//
+//                        Button(onClick = {
+//                            user.isLogin = true
+//                            coroutineScope.launch {
+//                                viewModel.updateUser(user)
+//                            }
+//                        }) {
+//                            Text(text = "Update ${user.name} ${user.email}")
+//                        }
+//                    }
+//
+//                }
+//
+//
+//            }
+//
+//            Button(onClick = {
+//                coroutineScope.launch {
+//                    withContext(Dispatchers.IO) {
+//                        // Operasi database dijalankan di Dispatchers.IO
+//                        viewModel.deleteAllUser()
+//                    }
+//
+//                }
+//            }) {
+//                Text(text = "Delete All User")
+//            }
 
 
         }
