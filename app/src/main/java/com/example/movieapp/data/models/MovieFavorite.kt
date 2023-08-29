@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "movie_favorites")
 data class MovieFavorite(
     @PrimaryKey(autoGenerate = true)
+    var pk: Int = 0,
     var id: Int,
     var adult: Boolean,
     var backdrop_path: String,

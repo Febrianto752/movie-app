@@ -59,16 +59,16 @@ fun MovieDetailsResponseApi.toMovieFavorite(): MovieFavorite {
         adult = adult,
         backdrop_path = backdrop_path,
         genre_ids = genres.map{it.id}.joinToString(", "),
-        original_language,
-        original_title,
-        overview,
-        popularity,
-        poster_path,
-        release_date,
-        title,
-        video,
-        vote_average,
-        vote_count
+        original_language = original_language,
+        original_title = original_title,
+        overview = overview,
+        popularity = popularity,
+        poster_path = poster_path,
+        release_date = release_date,
+        title = title,
+        video = video,
+        vote_average = vote_average,
+        vote_count = vote_count
     )
 
     return movieFavorite;
