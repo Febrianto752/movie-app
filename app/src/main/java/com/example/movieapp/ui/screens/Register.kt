@@ -259,23 +259,23 @@ fun RegisterScreen(
 
 }
 
-private val text = AnnotatedString.Builder("Already account? login!")
+private val text = AnnotatedString.Builder("Already have an account? login!")
     .apply {
         addStyle(
             style = SpanStyle(
                 color = Color.Blue,
                 textDecoration = TextDecoration.Underline
             ),
-            start = 17, // Start index of the link text
-            end = 23   // End index of the link text
+            start = 25, // Start index of the link text
+            end = 31   // End index of the link text
         )
 
         // Add a string annotation for the link click
         addStringAnnotation(
             tag = "URL",
             annotation = "https://www.example.com",
-            start = 17,
-            end = 23
+            start = 25,
+            end = 31
         )
     }
     .toAnnotatedString()

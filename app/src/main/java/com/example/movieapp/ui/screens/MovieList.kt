@@ -87,9 +87,6 @@ fun MovieList(
         it.isLogin == true;
     }
 
-
-
-
     val scrollState = rememberScrollState()
     Scaffold(
         topBar = {
