@@ -104,10 +104,12 @@ fun MovieDetails(
                 IconButton(
                     onClick = {
                         if (isFavorite) {
+                            var movieFavoriteUser = movieFavoriteViewModel.movieFavoriteList.find {
+                                it.user_id == userLogged?.id && it.id == viewModelMovieDetail.movieDetail!!.id
+                            }
                             coroutineScope.launch {
-                                var movieFavoriteUser = viewModelMovieDetail.movieDetail!!.toMovieFavorite()
-                                movieFavoriteUser.user_id = userLogged?.id ?: 0
-                                movieFavoriteViewModel.deleteMovieFavorite(movieFavoriteUser)
+
+                                movieFavoriteViewModel.deleteMovieFavorite(movieFavoriteUser!!)
                             }
                         } else {
                             coroutineScope.launch {

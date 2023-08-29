@@ -100,10 +100,12 @@ fun MovieCard(
                 IconButton(
                     onClick = {
                         if (isFavorite) {
+                            var movieFavoriteUser = movieFavoriteViewModel.movieFavoriteList.find {
+                                it.user_id == userLogged?.id && it.id == movie.id
+                            }
                             coroutineScope.launch {
-                                var movieFavoriteUser = movie.toMovieFavorite()
-                                movieFavoriteUser.user_id = userLogged?.id ?: 0
-                                movieFavoriteViewModel.deleteMovieFavorite(movieFavoriteUser)
+
+                                movieFavoriteViewModel.deleteMovieFavorite(movieFavoriteUser!!)
                             }
                         } else {
                             coroutineScope.launch {
@@ -164,7 +166,7 @@ fun MovieCard(
                         modifier = Modifier.size(18.dp)
 
                     )
-                    Text(text = "${movie.vote_average}", fontSize = 16.sp, color = Color.White)
+                    Text(text = "${String.format("%.1f", movie.vote_average)}", fontSize = 16.sp, color = Color.White)
                 }
 
                 Spacer(modifier = Modifier.height(4.dp))

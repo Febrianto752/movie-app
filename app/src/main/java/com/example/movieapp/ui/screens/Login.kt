@@ -28,17 +28,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -76,6 +80,23 @@ fun LoginScreen(
             var showToast = remember { mutableStateOf(false) }
 
             val coroutineScope = rememberCoroutineScope()
+
+            Text(
+                text = "eSFi",
+                fontSize = 22.sp,
+
+                style = TextStyle(
+                    brush = Brush.linearGradient(
+                        colors = listOf(
+                            Color.Black, Color.Red
+                        )
+                    )
+                ),
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.ExtraBold
+            )
+
             Image(
                 painter = painterResource(id = com.example.movieapp.R.drawable.ic_movie),
                 contentDescription = "profile image",

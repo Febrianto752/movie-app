@@ -1,5 +1,11 @@
 package com.example.movieapp.ui.screens
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
@@ -30,12 +37,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -94,87 +104,92 @@ fun MovieList(
                 })
         },
     ) { padding ->
-        Box(
-            modifier = Modifier
-                .padding(padding)
-                .background(
-                    color = Color(
-                        red = 0.1411765f,
-                        green = 0.18039216f,
-                        blue = 0.20392157f
-                    )
-                )
-        ) {
-            Column(
+        if (movieViewModel.topRatedMovies.isNotEmpty() && movieViewModel.popularMovies.isNotEmpty() && movieViewModel.upComingMovies.isNotEmpty()){
+            Box(
                 modifier = Modifier
-                    .padding(start = 10.dp, top = 20.dp)
-                    .verticalScroll(scrollState)
+                    .padding(padding)
+                    .background(
+                        color = Color(
+                            red = 0.1411765f,
+                            green = 0.18039216f,
+                            blue = 0.20392157f
+                        )
+                    )
             ) {
-                Text(
-                    "Top Rated",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp,
-                    color = Color.White
-                )
-
-                ImageCarousel(movies = movieViewModel.topRatedMovies, navController = navController)
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Text("Popular", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.White)
-
-                LazyRow(
-                    modifier = Modifier.padding(top = 8.dp),
+                Column(
+                    modifier = Modifier
+                        .padding(start = 10.dp, top = 20.dp)
+                        .verticalScroll(scrollState)
                 ) {
-                    items(movieViewModel.popularMovies) { movie ->
-                        Box(
-                            modifier = Modifier
-                                .padding(end = 8.dp)
-                                .width(200.dp)
-                        ) {
-                            MovieCard(
-                                movie = movie,
-                                navController = navController
-                            )
+                    Text(
+                        "Top Rated",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 22.sp,
+                        color = Color.White
+                    )
+
+                    ImageCarousel(movies = movieViewModel.topRatedMovies, navController = navController)
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    Text("Popular", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.White)
+
+                    LazyRow(
+                        modifier = Modifier.padding(top = 8.dp),
+                    ) {
+                        items(movieViewModel.popularMovies) { movie ->
+                            Box(
+                                modifier = Modifier
+                                    .padding(end = 8.dp)
+                                    .width(200.dp)
+                            ) {
+                                MovieCard(
+                                    movie = movie,
+                                    navController = navController
+                                )
+                            }
+
                         }
 
                     }
 
-                }
+                    Spacer(modifier = Modifier.height(24.dp))
 
-                Spacer(modifier = Modifier.height(24.dp))
+                    Text(
+                        "Up Coming",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        color = Color.White
+                    )
 
-                Text(
-                    "Up Coming",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = Color.White
-                )
+                    LazyRow(
+                        modifier = Modifier.padding(top = 8.dp),
+                    ) {
+                        items(movieViewModel.upComingMovies) { movie ->
+                            Box(
+                                modifier = Modifier
+                                    .padding(end = 8.dp)
+                                    .width(200.dp)
+                                    .background(color = Color.Transparent)
+                            ) {
+                                MovieCard(
+                                    movie = movie,
+                                    navController = navController
+                                )
+                            }
 
-                LazyRow(
-                    modifier = Modifier.padding(top = 8.dp),
-                ) {
-                    items(movieViewModel.upComingMovies) { movie ->
-                        Box(
-                            modifier = Modifier
-                                .padding(end = 8.dp)
-                                .width(200.dp)
-                                .background(color = Color.Transparent)
-                        ) {
-                            MovieCard(
-                                movie = movie,
-                                navController = navController
-                            )
                         }
 
                     }
 
+                    Spacer(modifier = Modifier.height(20.dp))
+
                 }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
             }
+        }else{
+            LoadingAnimationWithColorChange()
         }
+
 
     }
 }
@@ -202,4 +217,54 @@ fun MovieItemPreview() {
         }
 
     }
+}
+
+@Composable
+fun LoadingAnimationWithColorChange() {
+    var colorState = remember { mutableStateOf(Color.Gray) }
+
+    val colorAnimSpec = infiniteRepeatable(
+        animation = keyframes {
+            durationMillis = 1000
+            Color.Gray at 0 with LinearEasing // Initial color
+            Color.Blue at 500 with LinearEasing // Color change
+            Color.Gray at 1000 // Back to initial color
+        }
+    )
+
+    val currentColor by animateColorAsState(
+        targetValue = colorState.value,
+        animationSpec = colorAnimSpec
+    )
+
+    val brush = Brush.radialGradient(
+        colors = listOf(currentColor, Color.Transparent),
+        center = Offset.Unspecified,
+        radius = 200f
+    )
+
+    LaunchedEffect(colorState) {
+        colorState.value = Color.Blue
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(
+            modifier = Modifier
+                .size(150.dp)
+                .background(brush),
+        )
+        Text(text = "Loading...", fontSize = 20.sp)
+    }
+
+}
+
+@Preview
+@Composable
+fun LoadingAnimationWithColorChangePreview() {
+    LoadingAnimationWithColorChange()
 }
