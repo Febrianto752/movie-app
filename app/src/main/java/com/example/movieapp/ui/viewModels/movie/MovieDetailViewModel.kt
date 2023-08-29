@@ -27,7 +27,6 @@ class MovieDetailViewModel(private val movieApiService: MovieApiService):ViewMod
                     movieApiService.getMovieDetail(token, movieId)
                 }
 
-                println("get movie !!!")
                 if (getMovieByRequest != null) {
                     val responseTopRated = getMovieByRequest.execute()
 

@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.await
 
 
 class MovieViewModel(private val movieApiService: MovieApiService) : ViewModel() {
@@ -31,41 +32,33 @@ class MovieViewModel(private val movieApiService: MovieApiService) : ViewModel()
         GlobalScope.launch(Dispatchers.IO) {
 
             try {
-                println("Start ========")
                 var topRatedMoviesRequest = movieApiService.getTopRatedMovies(token)
-
-
                 var popularMoviesRequest = movieApiService.getPopularMovies(token)
-
-
                 var upComingMoviesRequest = movieApiService.getUpComingMovies(token)
 
-                println("top rated get !!!")
+
                 if (topRatedMoviesRequest != null && popularMoviesRequest != null && upComingMoviesRequest != null) {
-                    val responseTopRated = topRatedMoviesRequest.execute()
-                    val responsePopular = popularMoviesRequest.execute()
-                    val responseUpComing = upComingMoviesRequest.execute()
+                    val topRatedResponse = topRatedMoviesRequest.execute()
+                    val popularResponse = popularMoviesRequest.execute()
+                    val upComingResponse = upComingMoviesRequest.execute()
 
+                    val topRatedResponseBody = topRatedResponse.body()
+                    val topRatedResponseCode = topRatedResponse.code()
 
-                    val topRatedMovieResponse = responseTopRated.body()
-                    val topRatedResponseCode = responseTopRated.code()
+                    val popularResponseBody = popularResponse.body()
+                    val popularResponseCode = popularResponse.code()
 
-                    val popularMovieResponse = responsePopular.body()
-                    val popularResponseCode = responsePopular.code()
-
-                    val upComingMovieResponse = responseUpComing.body()
-                    val upComingResponseCode = responseUpComing.code()
+                    val upComingResponseBody = upComingResponse.body()
+                    val upComingResponseCode = upComingResponse.code()
 
                     println(topRatedResponseCode)
 
-                    if ((topRatedResponseCode == 200 && topRatedMovieResponse != null) && (popularResponseCode == 200 && popularMovieResponse != null) && (upComingResponseCode == 200 && upComingMovieResponse != null)) {
-                        topRatedMovies = topRatedMovieResponse.results;
-                        popularMovies = popularMovieResponse.results;
-                        upComingMovies = upComingMovieResponse.results;
+                    if ((topRatedResponseCode == 200 && topRatedResponseBody != null) && (popularResponseCode == 200 && popularResponseBody != null) && (upComingResponseCode == 200 && upComingResponseBody != null)) {
+                        topRatedMovies = topRatedResponseBody.results;
+                        popularMovies = popularResponseBody.results;
+                        upComingMovies = upComingResponseBody.results;
                     }
 
-
-                    println("hello1")
                 }
             } catch (exception: Exception) {
 
