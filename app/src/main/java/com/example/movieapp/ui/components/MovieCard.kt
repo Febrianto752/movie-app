@@ -164,7 +164,7 @@ fun MovieCard(
                         modifier = Modifier.size(18.dp)
 
                     )
-                    Text(text = "${movie.vote_average}", fontSize = 16.sp, color = Color.White)
+                    Text(text = "${String.format("%.1f", movie.vote_average)}", fontSize = 16.sp, color = Color.White)
                 }
 
                 Spacer(modifier = Modifier.height(4.dp))
