@@ -57,6 +57,9 @@ import com.example.movieapp.ui.viewModels.movie.MovieFavoriteViewModel
 import com.example.movieapp.ui.viewModels.movie.MovieViewModel
 import com.example.movieapp.ui.viewModels.user.UserViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 @Composable
@@ -84,17 +87,19 @@ fun MovieDetails(
         }
     }
 
-    if (movieId != null){
+    if (movieId != null) {
         LaunchedEffect(Unit) {
             coroutineScope.launch {
                 viewModelMovieDetail.setMovieDetail(movieId)
             }
         }
     }
-    
-    if (viewModelMovieDetail.movieDetail != null){
+
+    if (viewModelMovieDetail.movieDetail != null) {
         val scrollState = rememberScrollState()
-        Box(modifier = Modifier.fillMaxWidth().verticalScroll(scrollState)) {
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(scrollState)) {
             Box(
                 modifier = Modifier
                     .padding(top = 16.dp, end = 16.dp)
@@ -113,7 +118,8 @@ fun MovieDetails(
                             }
                         } else {
                             coroutineScope.launch {
-                                var movieFavoriteUser = viewModelMovieDetail.movieDetail!!.toMovieFavorite()
+                                var movieFavoriteUser =
+                                    viewModelMovieDetail.movieDetail!!.toMovieFavorite()
                                 movieFavoriteUser.user_id = userLogged?.id ?: 0
                                 movieFavoriteViewModel.createMovieFavorite(movieFavoriteUser)
                             }
@@ -166,8 +172,23 @@ fun MovieDetails(
                             tint = Color.White,
                             modifier = Modifier.size(18.dp)
                         )
-                        Text(text = "${String.format("%.1f", viewModelMovieDetail.movieDetail?.vote_average)}", fontSize = 16.sp, color = Color.White)
+                        Text(
+                            text = "${
+                                String.format(
+                                    "%.1f",
+                                    viewModelMovieDetail.movieDetail?.vote_average
+                                )
+                            }", fontSize = 16.sp, color = Color.White
+                        )
                     }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "Release : ${convertDateFormat(viewModelMovieDetail.movieDetail?.release_date!!)}",
+                        fontSize = 16.sp,
+                        color = Color.White
+                    )
 
                     Spacer(modifier = Modifier.height(8.dp))
 
@@ -214,10 +235,10 @@ fun MovieDetails(
 
             }
         }
-    }else{
+    } else {
         Text(text = "Loading...")
     }
-    
+
 }
 
 
@@ -239,8 +260,17 @@ fun MovieDetailsPreview() {
             Box(
                 modifier = Modifier.padding(paddingValues)
             ) {
-                MovieDetails( 278)
+                MovieDetails(278)
             }
         }
     }
+}
+
+
+fun convertDateFormat(inputDate: String): String {
+    val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val outputFormatter = DateTimeFormatter.ofPattern("EEEE, MMMM yyyy", Locale.ENGLISH)
+
+    val date = LocalDate.parse(inputDate, inputFormatter)
+    return outputFormatter.format(date)
 }
